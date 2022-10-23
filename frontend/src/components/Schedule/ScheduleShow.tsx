@@ -10,14 +10,13 @@ import Container from "@mui/material/Container";
 
 import Box from "@mui/material/Box";
 
-
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
-import { ScheduleInterface } from "../models/ISchedule";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import moment from "moment";
+import { DoctorInterface, ScheduleInterface } from "../../models/ISchedule";
+
 // import { createStyles, makeStyles,Theme } from '@mui/material/styles';
 // import { makeStyles,Theme,createStyles } from "@mui/material";
 const theme = createTheme({
@@ -34,24 +33,10 @@ const theme = createTheme({
 });
 
 
-// const useStyles = makeStyles((theme: Theme) =>
-
-//  createStyles({
-
-//    container: {marginTop: theme.spacing(2)},
-
-//    table: { minWidth: 650},
-
-//    tableSpace: {marginTop: 20},
-
-//  })
-
-// );
-
-
-function Users() {
+function ScheduleShow() {
   // const classes = useStyles();
   const [schedule, setSchedule] = React.useState<ScheduleInterface[]>([]);
+  const [user, setUser] = React.useState<DoctorInterface>();
 
   const getSchedule = async () => {
     const apiUrl = "http://localhost:8080/schedules";
@@ -59,7 +44,7 @@ function Users() {
     const requestOptions = {
       method: "GET",
 
-      headers: { "Content-Type": "application/json" },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}`, "Content-Type": "application/json" },
     };
 
     fetch(apiUrl, requestOptions)
@@ -74,20 +59,12 @@ function Users() {
       });
   };
 console.log(schedule)
-  // //ตาราง
-  // const columns: GridColDef[] = [
-  //   { field: "ID", headerName: "ID", width: 50 },
-
-  //   { field: "Name", headerName: "Name", width: 200 },
-
-  //   { field: "Medical activity", headerName: "Medical activity", width: 250 },
-
-  //   { field: "WorkPlace", headerName: "Location", width: 250 },
-
-  //   { field: "Time", headerName: "Date & Time", width: 200 },
-  // ];
 
   useEffect(() => {
+    const getToken = localStorage.getItem("token");
+        if (getToken) {
+            setUser(JSON.parse(localStorage.getItem("user") || ""));
+        }
     getSchedule();
   }, []);
 
@@ -156,19 +133,17 @@ console.log(schedule)
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                {/* ดึงช้อมูล */}
+{/* ดึงช้อมูล */}
                 <TableBody>
                   {schedule.map((item: ScheduleInterface) => (
                     <TableRow key={item.ID}>
                       <TableCell align="left">{item.ID}</TableCell>
 
-                      <TableCell align="left">
-                       
-                      </TableCell>
+                      <TableCell align="left">{item.Doctor?.Name}</TableCell>
 
                       <TableCell align="left">{item.MedActivity?.Name}</TableCell>
 
-                      <TableCell align="center">{item.WorkPlace?.Name}</TableCell>
+                      <TableCell align="center">{item.Location?.Name}</TableCell>
 
                       <TableCell align="center">     
                         {moment(item.Time).format("DD/MM/YYYY HH:mm:ss A")}
@@ -185,5 +160,5 @@ console.log(schedule)
   );
 }
 
-export default Users;
+export default ScheduleShow;
 

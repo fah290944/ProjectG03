@@ -9,8 +9,12 @@ import (
 // สร้างตารางชื่อ Admin
 type Admin struct {
 	gorm.Model
-	Ausername string
-	Apassword string
+	// Ausername string
+	// Apassword string
+
+	SigninID *uint
+	Signin Signin  `gorm:"references:ID"`
+
 	Aname     string
 	Tel       string
 	// รับข้อมูล Email ที่ไม่ซ้ำกัน
@@ -18,8 +22,6 @@ type Admin struct {
 	// ส่ง admin_id ไปตาราง Doctor เพื่อเป็น foreignKey
 	Doctor []Doctor `gorm:"foreignKey:AdminID"`
 
-	UserRoleID *uint
-	UserRole UserRole `gorm:"references:ID"`
 }
 
 // สร้างตารางชื่อ MedicalField
@@ -42,15 +44,19 @@ type WorkPlace struct {
 // สร้างตารางชื่อ Doctor เป็นตารางหลัก
 type Doctor struct {
 	gorm.Model
-	UserRoleID *uint
-	UserRole UserRole `gorm:"references:ID"`
+	
 	// รับข้อมูล PersonalID ที่ไม่ซ้ำกัน
 	PersonalID uint64 `gorm:"uniqueIndex"`
 	Name       string
 	Position   string
 	// รับข้อมูล Email ที่ไม่ซ้ำกัน
+
 	Email       string `gorm:"uniqueIndex"`
 	Password    string
+
+	SigninID *uint
+	Signin Signin  `gorm:"references:ID"`
+
 	Salary      uint64
 	Tel         string
 	Gender      string

@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// Schedule----------------------------------------
 // POST /schedule //เพิ่มข้อมูลใน DB
 
 func CreateSchedule(c *gin.Context) {
@@ -15,7 +16,7 @@ func CreateSchedule(c *gin.Context) {
 	var schedule entity.Schedule
 	var medActivity entity.MedActivity
 	var location entity.Location
-	// var doctor entity.Doctor
+	var doctor entity.Doctor
 
 	if err := c.ShouldBindJSON(&schedule); err != nil {
 
@@ -37,16 +38,16 @@ func CreateSchedule(c *gin.Context) {
 	}
 
 	// ค้นหา doctor ด้วย id
-	// if tx := entity.DB().Where("id = ?", schedule.DoctorID).First(&doctor); tx.RowsAffected == 0 {
-	// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Doctor not found"})
-	// 		return
-	// }
+	if tx := entity.DB().Where("id = ?", schedule.DoctorID).First(&doctor); tx.RowsAffected == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Doctor not found"})
+			return
+	}
 
 		// 12: สร้าง schedule
 		sd := entity.Schedule{
-			// Doctor:  doctor,             // โยงความสัมพันธ์กับ Entity doctor
+			Doctor:  doctor,            		 // โยงความสัมพันธ์กับ Entity doctor
 			Location: location,                  // โยงความสัมพันธ์กับ workPlace
-			MedActivity:    medActivity,               // โยงความสัมพันธ์กับ Entity medactivity
+			MedActivity:    medActivity,         // โยงความสัมพันธ์กับ Entity medactivity
 			Time: schedule.Time,
 		}
 	
@@ -88,7 +89,7 @@ func ListSchedules(c *gin.Context) {
 
 	var schedule []entity.Schedule
 
-	if err := entity.DB().Preload("WorkPlace").Preload("MedActivity").Raw("SELECT * FROM schedules").Find(&schedule).Error; err != nil {
+	if err := entity.DB().Preload("Doctor").Preload("Location").Preload("MedActivity").Raw("SELECT * FROM schedules").Find(&schedule).Error; err != nil {
 //ดึงตารางย่อยมา .preload
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
@@ -100,54 +101,77 @@ func ListSchedules(c *gin.Context) {
 
 }
 
-// DELETE /schedule/:id
+//location--------------------------------
+// GET /WorkPlace/:id ดึงข้อมูลเฉพาะตัวที่ต้องการ
 
-func DeleteSchedule(c *gin.Context) {
+func GetLocation(c *gin.Context) {
+
+	var location entity.Location
 
 	id := c.Param("id")
 
-	if tx := entity.DB().Exec("DELETE FROM schedules WHERE id = ?", id); tx.RowsAffected == 0 {
+	if err := entity.DB().Raw("SELECT * FROM Locations WHERE id = ?", id).Scan(&location).Error; err != nil {
 
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Schedule not found"})
+		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
-		return
+		   return
 
 	}
-
-	c.JSON(http.StatusOK, gin.H{"data": id})
+	c.JSON(http.StatusOK, gin.H{"data": location})
 
 }
 
-// PATCH /doctor
+// GET Location ดึงทั้งหมดใน DB ของ WorkPlace
+func ListLocations(c *gin.Context) {
 
-func UpdateSchedule(c *gin.Context) {
+	var location []entity.Location //[] อาเรย์
 
-	var schedule entity.Schedule
+	if err := entity.DB().Raw("SELECT * FROM  locations").Scan(&location).Error;
+		   err != nil {
 
-	if err := c.ShouldBindJSON(&schedule); err != nil {
+		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		   return
 
-		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": location})
+
+}
+
+//medActivity----------------------------------
+// GET /medActivity/:id ดึงข้อมูลเฉพาะตัวที่ต้องการ
+
+func GetMedActivity(c *gin.Context) {
+
+	var medActivity entity.MedActivity
+
+	id := c.Param("id")
+
+	if err := entity.DB().Raw("SELECT * FROM med_activities WHERE id = ?", id).Scan(&medActivity).Error; err != nil {
+
+		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		   return
 
 	}
 
-	if tx := entity.DB().Where("id = ?", schedule.ID).First(&schedule); tx.RowsAffected == 0 {
+	c.JSON(http.StatusOK, gin.H{"data": medActivity})
 
-		c.JSON(http.StatusBadRequest, gin.H{"error": "schedules not found"})
+}
 
-		return
+// GET /doctor ดึงทั้งหมดใน DB ของ หมอ
+func ListMedActivitys(c *gin.Context) {
+
+	var medActivity []entity.MedActivity
+
+	if err := entity.DB().Raw("SELECT * FROM med_activities").Scan(&medActivity).Error; err != nil {
+
+		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		   return
 
 	}
 
-	if err := entity.DB().Save(&schedule).Error; err != nil {
-
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-
-		return
-
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": schedule})
+	c.JSON(http.StatusOK, gin.H{"data": medActivity})
 
 }

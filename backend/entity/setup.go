@@ -24,10 +24,13 @@ func SetupDatabase() {
 	database.AutoMigrate(
 		//จัดการข้อมูลแพทย์ หรือ Manage_Information
 		&UserRole{},
+		&Signin{},
 		&Admin{},
+		&Doctor{},
 		&WorkPlace{},
 		&MedicalField{},
-		&Doctor{},
+		
+		
 
 		//ระบบยืมเครื่องมือแพทย์ หรือ BorrowMed_Equipment 
 		&MedicalEquipment{},

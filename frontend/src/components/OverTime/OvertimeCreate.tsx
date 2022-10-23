@@ -36,16 +36,13 @@ import { green } from "@mui/material/colors";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-//combobox
-import { ComboBoxComponent } from "@syncfusion/ej2-react-dropdowns";
 
-import { WorkPlaceInterface } from "../models/IWorkPlace";
-
-import { MedActivityInterface } from "../models/IMedActivity";
-import { Schedule } from "@mui/icons-material";
-import { ScheduleInterface } from "../models/ISchedule";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from '@mui/material/MenuItem';
+
+import { ActivitiesInterface, LocationworkInterface, OvertimeInterface } from "../../models/IOvertiome";
+import { DoctorInterface } from "../../models/ISchedule";
+import FormLabel from "@mui/material/FormLabel";
 
 
 const theme = createTheme({
@@ -70,14 +67,15 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function UserCreate() {
+function OvertimeCreate() {
  
 
   //  const [date, setDate] = React.useState<Date | null>(null);
 
-  const [schedule, setSchedule] = React.useState<Partial<ScheduleInterface>>({
-    WokrPlaceID: 0,
-    MedActivityID: 0,
+  const [overtime, setOvertime] = React.useState<Partial<OvertimeInterface>>({
+    LocationworkID: 0,
+    ActivityID: 0,
+    DoctorID: 0,
   });
 
 
@@ -87,26 +85,31 @@ function UserCreate() {
 
   const [error, setError] = React.useState(false);
 
-  const [medactivity, setmedactivity] = React.useState<MedActivityInterface[]>(
+  const [activity, setactivity] = React.useState<ActivitiesInterface[]>(
+    []
+  );
+  const [doctor, setDoctor] = React.useState<DoctorInterface[]>(
     []
   );
   //เราส่งมาในรูปแบบอาเรย์ ทำการดึงข้อมูล
-  const [workplace, setworkplace] = React.useState<WorkPlaceInterface[]>([]);
+  const [locationwork, setLocationwork] = React.useState<LocationworkInterface[]>([]);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date()
   );
+  const [user, setUser] = React.useState<DoctorInterface>();
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
 
-  const getWorkPlace = async () => {
-    const apiUrl = `http://localhost:8080/workPlace`;
+  const getLocationwork = async () => {
+    const apiUrl = `http://localhost:8080/Locationworks`;
 
     const requestOptions = {
       method: "GET",
 
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
@@ -118,20 +121,21 @@ function UserCreate() {
         console.log(res.data); //show ข้อมูล
 
         if (res.data) {
-          setworkplace(res.data);
+          setLocationwork(res.data);
         } else {
           console.log("else");
         }
       });
   };
   //activity
-  const getMedactivity = async () => {
-    const apiUrl = `http://localhost:8080/medActivitys`;
+  const getactivity = async () => {
+    const apiUrl = `http://localhost:8080/activities`;
 
     const requestOptions = {
       method: "GET",
 
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
@@ -143,7 +147,7 @@ function UserCreate() {
         console.log(res.data);
 
         if (res.data) {
-          setmedactivity(res.data);
+          setactivity(res.data);
         } else {
           console.log("else");
         }
@@ -151,6 +155,31 @@ function UserCreate() {
   };
   //activity
 
+  const getDoctor = async () => {
+    const apiUrl = `http://localhost:8080/doctors`;
+
+    const requestOptions = {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.data) {
+          setDoctor(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
   //เปิดปิดตัว Alert
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -162,59 +191,84 @@ function UserCreate() {
     }
 
     setSuccess(false);
-
     setError(false);
   };
 
-  console.log(schedule);
+  console.log(overtime);
 
   //ทุกครั้งที่พิมพ์จะทำงานเป็น state เหมาะสำหรับกับคีย์ textfield
-  const handleInputChange = (
-    event: React.ChangeEvent<{ id?: string; value: any }>
-  ) => {
-    const id = event.target.id as keyof typeof UserCreate;
-
-    const { value } = event.target;
-
-    //  setUser({ ...user, [id]: value });
-  };
+ 
   
 //กดเลือกคอมโบไม่ได้
   const handleChange = (
     event: SelectChangeEvent<number>
   ) => {
-    const name = event.target.name as keyof typeof schedule;
-    setSchedule({
-      ...schedule,
+    const name = event.target.name as keyof typeof overtime;
+    setOvertime({
+      ...overtime,
       [name]: event.target.value,
     });
   };
 
-  // const handleChange = (event: SelectChangeEvent<{ name?: string; value: unknown }>) => {
-  //   const name = event.target.name as keyof typeof schedule;
-  //     setSchedule({
-  //       ...schedule,
-  //       [name]: event.target.value,
-  //     });
-  // };
+  const handleInputChange = (
+
+    event: React.ChangeEvent<{ id?: string; value: any }>
+
+  ) => {
+
+    const id = event.target.id as keyof typeof overtime;
+
+    const { value } = event.target;
+
+    setOvertime({ ...overtime, [id]: value });
+
+  };
+
+
+  const handleInputChangenumber = (
+
+    event: React.ChangeEvent<{ id?: string; value: any }>
+
+  ) => {
+
+    const id = event.target.id as keyof typeof overtime;
+
+    const { value } = event.target;
+
+    setOvertime({ ...overtime, [id]: value  === "" ? "" : Number(value)  });
+
+  };
+
+
+
 
   function submit() {
     let data = {
-      //กับ คอน บรรทัด 48-50 แค่ข้างหน้า ชื่อต้องตรง!!!!!!!
-      WorkPlaceID: schedule.WokrPlaceID,
+      //แค่ข้างหน้า ชื่อต้องตรง!!!!!!!
+      DoctorID: user?.ID,
 
-      MedActivityID: schedule.MedActivityID,
+      LocationworkID: overtime.LocationworkID,
+
+      ActivityID: overtime.ActivityID,
 
       Time: selectedDate,
+      
+      // Num: typeof overtime?.Num === "string" ? (overtime?.Num === "" ? 0 : overtime?.Num) : overtime?.Num,
+    
+      Num: overtime.Num,
     };
 
     console.log(data)
-    const apiUrl = "http://localhost:8080/saveschedule";
+
+    const apiUrl = "http://localhost:8080/Overtimes";
 
     const requestOptions = {
       method: "POST",
 
-      headers: { "Content-Type": "application/json" },
+      headers: 
+      {  Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json" 
+      },
 
       body: JSON.stringify(data),
       //แปลงข้อมูล
@@ -233,9 +287,13 @@ function UserCreate() {
   }
 
   useEffect(() => {
-    //เอามาใช้ๆๆๆๆๆๆๆ*********
-    getWorkPlace();
-    getMedactivity();
+    const getToken = localStorage.getItem("token");
+    if (getToken) {
+        setUser(JSON.parse(localStorage.getItem("user") || ""));
+    }
+    getDoctor();
+    getLocationwork();
+    getactivity();
   }, []);
 
   return (
@@ -272,7 +330,7 @@ function UserCreate() {
                 color="inherit"
                 gutterBottom
               >
-                ตารางเวลาแพทย์
+                บันทึกข้อมูลล่วงเวลางาน
               </Typography>
             </Box>
           </Box>
@@ -280,46 +338,62 @@ function UserCreate() {
           <Divider />
 
           <Grid container spacing={3} sx={{ padding: 2 }}>
+          <Grid item xs={6}>
+              <p>ชื่อ - นามสกุล</p>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  fullWidth
+                  disabled
+                  id="DoctorID"
+                  value={user?.Name}
+                />
+              </FormControl>
+            </Grid>
+
             <Grid item xs={6}>
-              <p>สถานที่การทำงาน</p>
+              <p>กิจกรรมที่ทำ</p>
 
               <FormControl fullWidth variant="outlined">
                 <Select
-                  value = {schedule.WokrPlaceID}
+                  //value = {overtime.WokrPlaceID}
                   onChange = {handleChange}
                   inputProps={{
-                    name: "WokrPlaceID",
+                    name: "ActivityID",
                   }}
                   // defaultValue={0}
                 >
                   <MenuItem value={0} key={0}>
-                    เลือกสถานที่
+                    กรุณาเลือกกิจกรรม
                   </MenuItem>
-                  {workplace.map((item: WorkPlaceInterface) => (
+                  {activity.map((item: ActivitiesInterface) => (
                     <MenuItem value={item.ID}>{item.Name}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </Grid>
-
-            <Grid item xs={6}></Grid>
-
+            <Grid item xs={6}>
+                <p>จำนวนชั่วโมงที่ทำ</p>
+                <TextField 
+                fullWidth
+                id="Num" InputProps={{inputProps: {min: 1}}} type="number" variant="outlined" value={overtime?.Num} onChange={handleInputChangenumber} 
+                />
+            </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth variant="outlined">
-                <p>กิจกรรมของแพทย์</p>
+                <p>สถานที่ทำงาน</p>
 
                 <Select
-                  value={schedule.MedActivityID}
+                  value={overtime.LocationworkID}
                   onChange={handleChange}
                   inputProps={{
-                    name: "MedActivityID",
+                    name: "LocationworkID",
                   }}
                   // defaultValue={0}
                 >
                   <MenuItem value={0} key={0}>
-                    เลือกกิจกรรม
+                    กรุณาเลือกสถานที่ทำงาน
                   </MenuItem>
-                  {medactivity.map((item: MedActivityInterface) => (
+                  {locationwork.map((item: LocationworkInterface) => (
                     <MenuItem value={item.ID}>{item.Name}</MenuItem>
                   ))}
                 </Select>
@@ -333,7 +407,7 @@ function UserCreate() {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
                     renderInput={(props) => <TextField {...props} />}
-                    label="กรุณาเลือกวันและเวลา"
+                    //label="กรุณาเลือกวันและเวลา"
                     value={selectedDate} //แก้
                     // onChange={(newValue) => {
                     // setDate(newValue);
@@ -346,7 +420,17 @@ function UserCreate() {
             </Grid>
 
             <Grid item xs={12}>
-              <Button component={RouterLink} to="/Show"
+              <Button component={RouterLink} to="/OvertimeShow" variant="contained">
+                <Typography
+                  color="secondary"
+                  component="div"
+                  sx={{ flexGrow: 1 }}
+                >
+                  ย้อนกลับ
+                </Typography>
+              </Button>
+
+              <Button
                 style={{ float: "right" }}
                 onClick={submit}
                 variant="contained"
@@ -357,7 +441,7 @@ function UserCreate() {
                   component="div"
                   sx={{ flexGrow: 1 }}
                 >
-                  บันทึกตารางเวลาแพทย์
+                  บันทึกข้อมูลล่วงเวลางาน
                 </Typography>
               </Button>
             </Grid>
@@ -368,4 +452,4 @@ function UserCreate() {
   );
 }
 
-export default UserCreate;
+export default OvertimeCreate;

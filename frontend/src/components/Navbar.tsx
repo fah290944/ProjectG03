@@ -38,6 +38,9 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import HealingIcon from '@mui/icons-material/Healing';
+import { MenuItem } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useEffect, useState } from 'react';
 
 //สี
 const theme = createTheme({
@@ -104,19 +107,17 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-const menu = [
-  { name: "ระบบยืมเครื่องมือแพทย์", icon: <HomeRepairServiceIcon  />, path: "/Borrow" },
-  { name: "ระบบจัดการข้อมูลแพทย์", icon: <ManageAccountsIcon  />, path: "/Manaagemed" },
-  { name: "ระบบบันทึกข้อมูลล่วงเวลา", icon: <PendingActionsIcon   />, path: "/Overtiome" },
-  { name: "ระบบผู้ป่วยในการดูแลของแพทย์", icon: <HealingIcon  />, path: "/Patient" },
-  { name: "ระบบตารางเวลาแพทย์", icon: <CalendarMonthIcon  />, path: "/Schedule" },
-  { name: "ระบบลาพักงานของแพทย์", icon: <EventNoteIcon />, path: "/Takeleave" },
-]
+
+
+
+
+
 
 function Navbar() {
 
   const themep = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [role, setRole] = useState("");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -126,7 +127,42 @@ function Navbar() {
     setOpen(false);
   };
 
+  const SignOut = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  }
 
+  const menudoctor = [
+    { name: "ระบบยืมเครื่องมือแพทย์", icon: <HomeRepairServiceIcon  />, path: "/Borrow" },
+    { name: "ระบบบันทึกข้อมูลล่วงเวลา", icon: <PendingActionsIcon   />, path: "/Overtime" },
+    { name: "ระบบผู้ป่วยในการดูแลของแพทย์", icon: <HealingIcon  />, path: "/Patient" },
+    { name: "ระบบตารางเวลาแพทย์", icon: <CalendarMonthIcon  />, path: "/Schedule" },
+    { name: "ระบบลาพักงานของแพทย์", icon: <EventNoteIcon />, path: "/leave" },
+  ]
+  const admindoctor = [
+    { name: "ระบบจัดการข้อมูลแพทย์", icon: <ManageAccountsIcon  />, path: "/Doctor" },
+    { name: "ระบบตารางข้อมูลแพทย์", icon: <ManageAccountsIcon  />, path: "/DoctorShow" },
+  ]
+
+  var menu: any[];
+  switch(role){
+    case "Doctor":
+      menu = menudoctor;
+      break;
+    case "Admin":
+      menu = admindoctor;
+      break;
+    default:
+      menu = [];
+      break;
+  }
+
+  useEffect(() => {
+    const getToken = localStorage.getItem("token");
+    if (getToken) {
+      setRole(localStorage.getItem("role") || "");
+    } 
+  }, []);
   return (
   <ThemeProvider theme={theme}>
     <Box sx={{ display: 'flex' }} >
@@ -146,7 +182,7 @@ function Navbar() {
             <Typography variant="h6" color="secondary" noWrap component="div">
               ระบบข้อมูลแพทย์
             </Typography>
-            <AccountCircleIcon color ="secondary" > </AccountCircleIcon>
+            <MenuItem onClick={SignOut}><LogoutIcon style={{ marginRight: ".5rem" }}/>Log out</MenuItem>
           </Box>
           
         </Toolbar>

@@ -11,7 +11,7 @@ import (
 
 // LoginPayload login body
 type LoginPayload struct {
-	Email    string `json:"email"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -19,7 +19,7 @@ type LoginPayload struct {
 type DoctorResponse struct {
 	Token    string        `json:"token"`
 	ID       uint          `json:"id"`
-	Doctor   entity.Doctor `json:"user"` //สร้างเพื่อ
+	Doctor   entity.Doctor `json:"user"` //สร้างเพื่อแยกDoctor
 	RoleName string        `json:"role"`
 }
 
@@ -27,28 +27,28 @@ type DoctorResponse struct {
 type AdminResponse struct {
 	Token    string       `json:"token"`
 	ID       uint         `json:"id"`
-	Admin    entity.Admin `json:"user"` //สร้างเพื่อ
+	Admin    entity.Admin `json:"user"` //สร้างเพื่อแยกAdmin
 	RoleName string       `json:"role"`
 }
 
 // POST /login
 func Login(c *gin.Context) {
 	var payload LoginPayload
-	var doctor entity.Doctor
-	var admin entity.Admin
+	var signin entity.Signin
 
 	if err := c.ShouldBindJSON(&payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	// ค้นหา doctor ด้วย email ที่ผู้ใช้กรอกเข้ามา
-	if err := entity.DB().Raw("SELECT * FROM doctors WHERE email = ?", payload.Email).Scan(&doctor).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if tx := entity.DB().Raw("SELECT * FROM signins WHERE username = ?", payload.Username).Preload("UserRole").
+		Find(&signin); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 		return
 	}
 
 	// ตรวจสอบรหัสผ่าน สิ่งที่เข้ารหัสมาถอดรหัส
-	err := bcrypt.CompareHashAndPassword([]byte(doctor.Password), []byte(payload.Password))
+	err := bcrypt.CompareHashAndPassword([]byte(signin.Password), []byte(payload.Password))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "password is incerrect"})
 		return
@@ -65,7 +65,7 @@ func Login(c *gin.Context) {
 		ExpirationHours: 24,
 	}
 
-	signedToken, err := jwtWrapper.GenerateToken(doctor.Email)
+	signedToken, err := jwtWrapper.GenerateToken(signin.Username)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
 		return
@@ -75,37 +75,41 @@ func Login(c *gin.Context) {
 	var DoctorRole entity.UserRole
 	entity.DB().Raw("SELECT * FROM user_roles WHERE role_name = ?", "Admin").First(&AdminRole)
 	entity.DB().Raw("SELECT * FROM user_roles WHERE role_name = ?", "Doctor").First(&DoctorRole)
-	if doctor.UserRole.RoleName == DoctorRole.RoleName {
+
+	if signin.UserRole.RoleName == DoctorRole.RoleName {
+		var doctor entity.Doctor
 		if tx := entity.DB().
-			Raw("SELECT * FROM doctors WHERE id = ?", doctor.ID).Find(&doctor); tx.RowsAffected == 0 {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "doctor not found"})
+			Raw("SELECT * FROM doctors WHERE signin_id = ?", signin.ID).Find(&doctor); tx.RowsAffected == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "doctors not found"})
 			return
 		}
 
 		tokenResponse := DoctorResponse{
-			Token:  signedToken,
-			ID:     doctor.ID,
-			Doctor: doctor,
+			Token:    signedToken,
+			ID:       doctor.ID,
+			Doctor:   doctor,
 			RoleName: DoctorRole.RoleName,
 		}
 
 		c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
-	}else if admin.UserRole.RoleName == AdminRole.RoleName {
+	} else if signin.UserRole.RoleName == AdminRole.RoleName {
+		var admin entity.Admin
+
 		if tx := entity.DB().
-			Raw("SELECT * FROM admins WHERE id = ?", admin.ID).Find(&admin); tx.RowsAffected == 0 {
+			Raw("SELECT * FROM admins WHERE signin_id = ?", signin.ID).Find(&admin); tx.RowsAffected == 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "admins not found"})
 			return
 		}
 
 		tokenResponse := AdminResponse{
-			Token:  signedToken,
-			ID:     admin.ID,
-			Admin:  admin,
+			Token:    signedToken,
+			ID:       admin.ID,
+			Admin:    admin,
 			RoleName: AdminRole.RoleName,
 		}
 
 		c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
-		
+
 	}
 
 }

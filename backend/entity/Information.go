@@ -7,12 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
+// เข้ารหัส
 func SetupPasswordHash(pwd string) string {
 	var password, _ = bcrypt.GenerateFromPassword([]byte(pwd), 14)
 	return string(password)
 }
 
-func SetupIntoDatabase(db *gorm.DB) { 
+func SetupIntoDatabase(db *gorm.DB) {
 	//ระบบจัดการข้อมูล
 	// Password1, err := bcrypt.GenerateFromPassword([]byte("Janjan@09"), 14)
 	// Password2, err := bcrypt.GenerateFromPassword([]byte("Inkjizoo$25"), 14)
@@ -28,22 +29,58 @@ func SetupIntoDatabase(db *gorm.DB) {
 	}
 	db.Model(&UserRole{}).Create(&Doctorrole)
 
+	//login
+	loginAdmin1 := Signin{
+		Username: "PasopNiran445",
+		Password: SetupPasswordHash("Janjan@09"),
+		UserRole: Adminrole,
+	}
+	db.Model(&Signin{}).Create(&loginAdmin1)
+
+	loginAdmin2 := Signin{
+		Username: "Operamashell65",
+		Password: SetupPasswordHash("Inkjizoo$25"),
+		UserRole: Adminrole,
+	}
+	db.Model(&Signin{}).Create(&loginAdmin2)
+
+	//Doctor login
+	loginDoctor1 := Signin{
+		Username: "Phonsak@gmail.com",
+		Password: SetupPasswordHash("Phonsak01"),
+		UserRole: Doctorrole,
+	}
+	db.Model(&Signin{}).Create(&loginDoctor1)
+	loginDoctor2 := Signin{
+		Username: "Hanoi@hotmail.in.th",
+		Password: SetupPasswordHash("Hanoiploy"),
+		UserRole: Doctorrole,
+	}
+	db.Model(&Signin{}).Create(&loginDoctor2)
+
+	loginDoctor3 := Signin{
+		Username: "Kanok@hotmail.com",
+		Password: SetupPasswordHash("Pookpik05"),
+		UserRole: Doctorrole,
+	}
+	db.Model(&Signin{}).Create(&loginDoctor3)
+
 	// Set Data Admin
 	db.Model(&Admin{}).Create(&Admin{
-		Ausername: "PasopNiran445",
-		Apassword: "Janjan@09",
-		Aname:     "Pasop Panha",
-		Tel:       "0933486361",
-		Email:     "Pasop@hotmail.com",
-		UserRole:     Adminrole,
+		// Ausername: "PasopNiran445",
+		// Apassword: SetupPasswordHash("Janjan@09"),
+		Aname:  "Pasop Panha",
+		Tel:    "0933486361",
+		Email:  "Pasop@hotmail.com",
+		Signin: loginAdmin1,
 	})
 	db.Model(&Admin{}).Create(&Admin{
-		Ausername: "Operamashell65",
-		Apassword: "Inkjizoo$25",
-		Aname:     "Saroj Winai",
-		Tel:       "0933486362",
-		Email:     "Saroj2@hmail.com",
-		UserRole:     Adminrole,
+		// Ausername: "Operamashell65",
+		// Apassword: SetupPasswordHash("Inkjizoo$25"),
+		Aname:  "Saroj Winai",
+		Tel:    "0933486362",
+		Email:  "Saroj2@hmail.com",
+		Signin: loginAdmin2,
 	})
 
 	// Set Data WorkPlace
@@ -109,11 +146,11 @@ func SetupIntoDatabase(db *gorm.DB) {
 	timeyear3 := time.Date(1997, 4, 24, 0, 0, 0, 0, time.Local)
 
 	db.Model(&Doctor{}).Create(&Doctor{
-		PersonalID:   1430099536148,
-		Name:         "Phonsak songsang",
-		Position:     "H. Surgery",
-		Email:        "Phon@gmail.com",
-		Password:     "Phonsak01",
+		PersonalID: 1430099536148,
+		Name:       "Phonsak songsang",
+		Position:   "H. Surgery",
+		Email:        "Phonsak@gmail.com",
+		Password:     SetupPasswordHash("Phonsak01"),
 		Salary:       35500,
 		Tel:          "0653215252",
 		Gender:       "Male",
@@ -123,7 +160,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Admin:        PasopNiran445,
 		WorkPlace:    Surgery,
 		MedicalField: Sur,
-		UserRole:     Doctorrole,
+		Signin:       loginAdmin1,
 	})
 
 	db.Model(&Doctor{}).Create(&Doctor{
@@ -131,7 +168,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Name:         "Hanoi slotmachine",
 		Position:     "h. Surgery",
 		Email:        "Hanoi@hotmail.in.th",
-		Password:     "Hanoiploy",
+		Password:     SetupPasswordHash("Hanoiploy"),
 		Salary:       29500,
 		Tel:          "0562354210",
 		Gender:       "Female",
@@ -141,7 +178,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Admin:        Operamashell65,
 		WorkPlace:    Surgery,
 		MedicalField: Sur,
-		UserRole:     Doctorrole,
+		Signin:       loginAdmin1,
 	})
 
 	db.Model(&Doctor{}).Create(&Doctor{
@@ -149,7 +186,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Name:         "Kanokthip Lamai",
 		Position:     "Surgery",
 		Email:        "Kanok@hotmail.com",
-		Password:     "Pookpik05",
+		Password:     SetupPasswordHash("Pookpik05"),
 		Salary:       24000,
 		Tel:          "0819656265",
 		Gender:       "Male",
@@ -159,7 +196,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Admin:        PasopNiran445,
 		WorkPlace:    Surgery,
 		MedicalField: Sur,
-		UserRole:     Doctorrole,
+		Signin:       loginAdmin2,
 	})
 
 	var Phonsak Doctor
@@ -168,7 +205,6 @@ func SetupIntoDatabase(db *gorm.DB) {
 	db.Raw("SELECT * FROM doctors WHERE name = ?", "Phonsak songsang").Scan(&Phonsak)
 	db.Raw("SELECT * FROM doctors WHERE name = ?", "Hanoi slotmachine").Scan(&Hanoi)
 	db.Raw("SELECT * FROM doctors WHERE name = ?", "Kanokthip Lamai").Scan(&Kanokthip)
-	
 
 	//ระบบยืมเครื่องมือ
 	db.Model(&TypeofUse{}).Create(&TypeofUse{
@@ -189,21 +225,21 @@ func SetupIntoDatabase(db *gorm.DB) {
 	db.Raw("SELECT * FROM Typeof_uses WHERE name = ?", "general").Scan(&general)
 
 	humanbloodbag := MedicalEquipment{
-		Name: "human blood bag",
+		Name:      "human blood bag",
 		TypeofUse: licensed,
 		// TypeOfUse: licensed,
 	}
 	db.Model(&MedicalEquipment{}).Create(&humanbloodbag)
 
 	drugtestingkit := MedicalEquipment{
-		Name: "drug testing kit",
+		Name:      "drug testing kit",
 		TypeofUse: informdetails,
 		// TypeOfUse: informdetails,
 	}
 	db.Model(&MedicalEquipment{}).Create(&drugtestingkit)
 
 	surgicalequipment := MedicalEquipment{
-		Name: "surgical equipment",
+		Name:      "surgical equipment",
 		TypeofUse: general,
 		// TypeOfUse: general,
 	}
@@ -246,7 +282,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Quant:            1,
 		Doctor:           Phonsak, //แก้ดึงข้อมูลจากเติล
 		MedicalEquipment: humanbloodbag,
-		Worklocation:        Out,
+		Worklocation:     Out,
 	})
 
 	db.Model(&Borrow{}).Create(&Borrow{
@@ -255,7 +291,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Quant:            2,
 		Doctor:           Hanoi, //แก้ดึงข้อมูลจากเติล
 		MedicalEquipment: drugtestingkit,
-		Worklocation:        In,
+		Worklocation:     In,
 	})
 
 	db.Model(&Borrow{}).Create(&Borrow{
@@ -264,7 +300,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Quant:            3,
 		Doctor:           Kanokthip, //แก้ดึงข้อมูลจากเติล
 		MedicalEquipment: surgicalequipment,
-		Worklocation:        Out,
+		Worklocation:     Out,
 	})
 
 	//ระบบบันทึกข้อมูลล่วงเวลา
@@ -315,27 +351,27 @@ func SetupIntoDatabase(db *gorm.DB) {
 	//Overtime Data
 	//overtime1
 	db.Model(&Overtime{}).Create(&Overtime{
-		Doctor:    Phonsak, //แก้ดึงข้อมูลจากเติล
-		Activity:  morningduty,
+		Doctor:       Phonsak, //แก้ดึงข้อมูลจากเติล
+		Activity:     morningduty,
 		Locationwork: OP,
-		Num:       7,
-		Time:      time.Date(2022, 9, 11, 6, 0, 0, 0, time.Now().Location()),
+		Num:          7,
+		Time:         time.Date(2022, 9, 11, 6, 0, 0, 0, time.Now().Location()),
 	})
 	//overtime2
 	db.Model(&Overtime{}).Create(&Overtime{
-		Doctor:    Hanoi, //แก้ดึงข้อมูลจากเติล
-		Activity:  nightduty,
+		Doctor:       Hanoi, //แก้ดึงข้อมูลจากเติล
+		Activity:     nightduty,
 		Locationwork: IP,
-		Num:       8,
-		Time:      time.Date(2022, 9, 13, 8, 0, 0, 0, time.Now().Location()),
+		Num:          8,
+		Time:         time.Date(2022, 9, 13, 8, 0, 0, 0, time.Now().Location()),
 	})
 	//overtime3
 	db.Model(&Overtime{}).Create(&Overtime{
-		Doctor:    Kanokthip, //แก้ดึงข้อมูลจากเติล
-		Activity:  extraduty,
+		Doctor:       Kanokthip, //แก้ดึงข้อมูลจากเติล
+		Activity:     extraduty,
 		Locationwork: ER,
-		Num:       6,
-		Time:      time.Date(2022, 9, 15, 5, 0, 0, 0, time.Now().Location()),
+		Num:          6,
+		Time:         time.Date(2022, 9, 15, 5, 0, 0, 0, time.Now().Location()),
 	})
 
 	//ระบบผู้ป่วยในการดูแลของแพทย์
@@ -374,7 +410,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 	db.Model(&Patient{}).Create(&Patient{
 		PatientsName: "Arnon Derek",
 		DateAdmit:    time.Date(2022, 1, 2, 9, 0, 0, 0, time.Now().Location()),
-		Room:         129,
+		Age:          32,
 		Doctor:       Phonsak,
 		Symptoms:     Sym3,
 		PatientType:  type2,
@@ -383,6 +419,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 	db.Model(&Patient{}).Create(&Patient{
 		PatientsName: "Darin Darwin",
 		DateAdmit:    time.Date(2022, 3, 2, 10, 0, 0, 0, time.Now().Location()),
+		Age:          51,
 		Doctor:       Hanoi,
 		Symptoms:     Sym1,
 		PatientType:  type1,
@@ -391,7 +428,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 	db.Model(&Patient{}).Create(&Patient{
 		PatientsName: "Thana Ngampon",
 		DateAdmit:    time.Date(2022, 2, 3, 9, 0, 0, 0, time.Now().Location()),
-		Room:         127,
+		Age:          60,
 		Doctor:       Phonsak,
 		Symptoms:     Sym4,
 		PatientType:  type2,
@@ -400,17 +437,17 @@ func SetupIntoDatabase(db *gorm.DB) {
 	//ระบบตารางเวลาแพทย์
 	//การเพิ่มข้อมูลตาราง WorkPalce
 	loca1 := Location{
-		Name:    "Emergency and Accident Department",
+		Name: "Emergency and Accident Department",
 		// Address: "Suranaree Building, 1st Floor",
 	}
 	db.Model(&Location{}).Create(&loca1)
 
 	loca2 := Location{
-		Name:    "Outpatient Department",
+		Name: "Outpatient Department",
 		// Address: "Suranaree Building, 1st Floor",
 	}
 	db.Model(&Location{}).Create(&loca2)
-	
+
 	//การเพิ่มข้อมูลตาราง MedActivity
 	Activity1 := MedActivity{
 		Name: "Operating Room",
@@ -425,18 +462,17 @@ func SetupIntoDatabase(db *gorm.DB) {
 	timeSchedule1 := time.Date(2022, 8, 30, 06, 00, 00, 00, time.Local)
 	timeSchedule2 := time.Date(2022, 8, 30, 10, 00, 00, 00, time.Local)
 
-
 	db.Model(&Schedule{}).Create(&Schedule{
 		Time:        timeSchedule1,
 		Doctor:      Phonsak,
-		Location:   loca1,
+		Location:    loca1,
 		MedActivity: Activity1,
 	})
 
 	db.Model(&Schedule{}).Create(&Schedule{
 		Time:        timeSchedule2,
 		Doctor:      Hanoi,
-		Location:   loca2,
+		Location:    loca2,
 		MedActivity: Activity2,
 	})
 
@@ -478,7 +514,6 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Reason:   "to run errands in the provinces",
 		Fdate:    time.Date(2022, 1, 1, 0, 0, 0, 0, time.Now().Location()),
 		Ldate:    time.Date(2022, 1, 5, 0, 0, 0, 0, time.Now().Location()),
-		Cdate:    5,
 		Doctor:   Phonsak,
 		Type:     Personal,
 		Evidence: Document,
@@ -488,11 +523,9 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Reason:   "COVID-infected",
 		Fdate:    time.Date(2022, 2, 1, 0, 0, 0, 0, time.Now().Location()),
 		Ldate:    time.Date(2022, 2, 16, 0, 0, 0, 0, time.Now().Location()),
-		Cdate:    15,
 		Doctor:   Hanoi,
 		Type:     Sick,
 		Evidence: Medicalcertificate,
 	})
-
 
 }
