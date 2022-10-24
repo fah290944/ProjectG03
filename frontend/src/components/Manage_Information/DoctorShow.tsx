@@ -11,7 +11,7 @@ import { green } from "@mui/material/colors";
 
 import moment from "moment";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { AdminsInterface, DoctorsInterface } from "../../models/IManage";
+import { DoctorsInterface } from "../../models/IManage";
 
 const theme = createTheme({
   palette: {
@@ -28,7 +28,6 @@ const theme = createTheme({
 
 function Doctors() {
   const [doctors, setDoctors] = React.useState<DoctorsInterface[]>([]);
-  const [user, setUser] = React.useState<AdminsInterface>();
   const getDoctors = async () => {
     const apiUrl = "http://localhost:8080/doctors";
     const requestOptions = {
@@ -126,8 +125,8 @@ function Doctors() {
                             <TableCell align="center">{moment(item.YearOfStart).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
                             <TableCell align="center">{item.Address}</TableCell>
                             <TableCell align="center">{item.Admin.Aname}</TableCell>
-                            <TableCell align="center">{item.MedicalField?.Bname}</TableCell>
-                            <TableCell align="center">{item.WorkPlace?.Paddress}</TableCell>
+                            <TableCell align="center">{item.MedicalField.Bname}</TableCell>
+                            <TableCell align="center">{item.WorkPlace.Paddress}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
