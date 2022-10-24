@@ -276,7 +276,7 @@ const theme = createTheme({
                   color="inherit"
                   gutterBottom
                 >
-                  ตารางเวลาแพทย์
+                  ยืมเครื่องมือแพทย์
                 </Typography>
               </Box>
             </Box>

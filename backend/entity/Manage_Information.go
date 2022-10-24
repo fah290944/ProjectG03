@@ -13,15 +13,14 @@ type Admin struct {
 	// Apassword string
 
 	SigninID *uint
-	Signin Signin  `gorm:"references:ID"`
+	Signin   Signin `gorm:"references:ID"`
 
-	Aname     string
-	Tel       string
+	Aname string
+	Tel   string
 	// รับข้อมูล Email ที่ไม่ซ้ำกัน
 	Email string `gorm:"uniqueIndex"`
 	// ส่ง admin_id ไปตาราง Doctor เพื่อเป็น foreignKey
 	Doctor []Doctor `gorm:"foreignKey:AdminID"`
-
 }
 
 // สร้างตารางชื่อ MedicalField
@@ -44,18 +43,18 @@ type WorkPlace struct {
 // สร้างตารางชื่อ Doctor เป็นตารางหลัก
 type Doctor struct {
 	gorm.Model
-	
+
 	// รับข้อมูล PersonalID ที่ไม่ซ้ำกัน
 	PersonalID uint64 `gorm:"uniqueIndex"`
 	Name       string
 	Position   string
 	// รับข้อมูล Email ที่ไม่ซ้ำกัน
 
-	Email       string `gorm:"uniqueIndex"`
-	Password    string
+	Email    string `gorm:"uniqueIndex"`
+	Password string
 
 	SigninID *uint
-	Signin Signin  `gorm:"references:ID"`
+	Signin   Signin `gorm:"references:ID"`
 
 	Salary      uint64
 	Tel         string
@@ -77,7 +76,7 @@ type Doctor struct {
 	MedicalField   MedicalField `gorm:"references:ID"`
 
 	//เชื่อมไประบบตารางเวลาแพทย์
-	Schedule []Schedule  `gorm:"foreignKey:DoctorID"`
+	Schedule []Schedule `gorm:"foreignKey:DoctorID"`
 
 	//เชื่อมไประบบผู้ป่วยในการดูแลของแพทย์
 	Patient []Patient `gorm:"foreignKey:DoctorID"`
@@ -87,6 +86,4 @@ type Doctor struct {
 	Leave []Leave `gorm:"foreignKey:DoctorID"`
 
 	Borrow []Borrow `gorm:"foreignKey:DoctorID"`
-
-
 }

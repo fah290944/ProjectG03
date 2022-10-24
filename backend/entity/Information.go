@@ -44,6 +44,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 	}
 	db.Model(&Signin{}).Create(&loginAdmin2)
 
+
 	//Doctor login
 	loginDoctor1 := Signin{
 		Username: "Phonsak@gmail.com",
@@ -160,7 +161,8 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Admin:        PasopNiran445,
 		WorkPlace:    Surgery,
 		MedicalField: Sur,
-		Signin:       loginAdmin1,
+		Signin:       loginDoctor1,
+
 	})
 
 	db.Model(&Doctor{}).Create(&Doctor{
@@ -178,7 +180,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Admin:        Operamashell65,
 		WorkPlace:    Surgery,
 		MedicalField: Sur,
-		Signin:       loginAdmin1,
+		Signin:       loginDoctor2,
 	})
 
 	db.Model(&Doctor{}).Create(&Doctor{
@@ -196,7 +198,7 @@ func SetupIntoDatabase(db *gorm.DB) {
 		Admin:        PasopNiran445,
 		WorkPlace:    Surgery,
 		MedicalField: Sur,
-		Signin:       loginAdmin2,
+		Signin:       loginDoctor3,
 	})
 
 	var Phonsak Doctor

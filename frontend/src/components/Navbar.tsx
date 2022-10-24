@@ -212,7 +212,8 @@ function Navbar() {
         <Divider />
 
          {menu.map((item, index) => (
-                <ListItem key={index} button component={RouterLink} to={item.path}>
+                <ListItem key={index} button component={RouterLink} onClick={handleDrawerClose}
+                 to={item.path}>
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText>{item.name}</ListItemText>
                   

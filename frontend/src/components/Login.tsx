@@ -77,12 +77,12 @@ function SignIn() {
         setError(false);
     };
 
-    // const keyPressEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    //     if (event.key === "Enter") {
-    //       event.stopPropagation();
-    //       login();
-    //     }
-    //   }
+    const keyPressEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === "Enter") {
+          event.stopPropagation();
+          login();
+        }
+      }
 
     // const Signin = async (data: SigninInterface) => {
     //     const requestOptions = {
@@ -192,7 +192,7 @@ function SignIn() {
                                 autoFocus
                                 value={signin.Username || ""}
                                 onChange={handleInputChange}
-                                // onKeyDown={keyPressEnter}
+                                onKeyDown={keyPressEnter}
                             />
                             <TextField
                                 margin="normal"
@@ -205,7 +205,7 @@ function SignIn() {
                                 autoComplete="current-password"
                                 value={signin.Password || ""}
                                 onChange={handleInputChange}
-                                // onKeyDown={keyPressEnter}
+                                onKeyDown={keyPressEnter}
                             />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}

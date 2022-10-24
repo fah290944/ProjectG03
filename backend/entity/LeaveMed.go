@@ -37,4 +37,6 @@ type Leave struct {
 	// EvidenceID ทำหน้าที่เป็น FK
 	EvidenceID *uint
 	Evidence   Evidence `gorm:"references:ID"`
+
+
 }

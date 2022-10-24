@@ -25,7 +25,6 @@ type MedicalEquipment struct {
 	Borrow []Borrow `gorm:"foreignKey:MedicalEquipmentID"`
 }
 
-
 type Worklocation struct {
 	gorm.Model
 	Name    string
@@ -49,4 +48,6 @@ type Borrow struct {
 
 	WorklocationID *uint
 	Worklocation   Worklocation
+
+
 }

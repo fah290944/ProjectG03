@@ -4,16 +4,36 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { DoctorsInterface } from "../../models/IManage";
+
+// สี
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { green } from "@mui/material/colors";
+
+import moment from "moment";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { AdminsInterface, DoctorsInterface } from "../../models/IManage";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      // Purple and green play nicely together.
+      main: green[500],
+    },
+    secondary: {
+      // This is green.A700 as hex.
+      main: "#e8f5e9",
+    },
+  }
+});
 
 function Doctors() {
   const [doctors, setDoctors] = React.useState<DoctorsInterface[]>([]);
+  const [user, setUser] = React.useState<AdminsInterface>();
   const getDoctors = async () => {
     const apiUrl = "http://localhost:8080/doctors";
     const requestOptions = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}`, "Content-Type": "application/json" },
     };
 
     fetch(apiUrl, requestOptions)
@@ -26,71 +46,99 @@ function Doctors() {
       });
   };
 
-  const columns: GridColDef[] = [
-
-    { field: "ID", headerName: "ID", width: 10 },
-    { field: "PersonalID", headerName: "Personal ID", width: 130 },
-    { field: "Name", headerName: "Name", width: 170 },
-    { field: "Position", headerName: "Position", width: 125 },
-    { field: "Email", headerName: "Email", width: 170 },
-    { field: "Password", headerName: "Password", width: 125 },
-    { field: "Salary", headerName: "Salary", width: 60 },
-    { field: "Tel", headerName: "Tel", width: 100 },
-    { field: "Gender", headerName: "Gender", width: 70 },
-    { field: "DateOfBirth", headerName: "Date Of Birth", width: 205 },
-    { field: "YearOfStart", headerName: "Year Of Start", width: 205 },
-    { field: "Address", headerName: "Address", width: 400 },
-    { field: "AdminID", headerName: "Admin ID", width: 80 },
-    { field: "MedicalFieldID", headerName: "Medical Field ID", width: 120 },
-    { field: "WorkPlaceID", headerName: "Work Place ID", width: 110 },
-
-  ];
-
   useEffect(() => {
     getDoctors();
   }, []);
 
   return (
     <div>
+      <ThemeProvider theme={theme}>
       <Container maxWidth="md">
-        <Box
-          display="flex"
-          sx={{
-            marginTop: 2,
-          }}
-        >
-          <Box flexGrow={1}>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
-            >
-              Doctors!
-            </Typography>
+      <Box
+            display="flex"
+            sx={{
+              marginTop: 2,
+            }}
+          >
+            <Box flexGrow={1}>
+              <Typography
+                component="h2"
+                variant="h6"
+                color="primary"
+                gutterBottom
+              >
+                ตารางข้อมูลแพทย์
+              </Typography>
+            </Box>
+
+            <Box>
+              <Button
+                component={RouterLink}
+                to="/Doctor"
+                variant="contained"
+                color="success"
+              >
+                บันทึกข้อมูลแพทย์
+              </Button>
+            </Box>
           </Box>
 
-          <Box>
-            <Button
-              component={RouterLink}
-              to="/Doctor"
-              variant="contained"
-              color="primary"
-            >
-              Create Doctors
-            </Button>
-          </Box>
-        </Box>
-        <div style={{ height: 400, width: "100%", marginTop: '20px' }}>
-          <DataGrid
-            rows={doctors}
-            getRowId={(row) => row.ID}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-          />
-        </div>
+          <ThemeProvider theme={theme}>
+            <div>
+              <Container maxWidth="md">
+                <div style={{ height: 500, width: "100%", marginTop: "20px" }}>
+                  <TableContainer >
+                    <Table aria-label="simple table">
+                      <TableHead>
+                        {/* หัวข้อตาราง */}
+                        <TableRow>
+                          <TableCell align="center" width="20%"> ID </TableCell>
+                          <TableCell align="center" width="20%"> Personal ID </TableCell>
+                          <TableCell align="center" width="20%"> Name </TableCell>
+                          <TableCell align="center" width="20%"> Position </TableCell>
+                          <TableCell align="center" width="20%"> Email </TableCell>
+                          <TableCell align="center" width="20%"> Password </TableCell>
+                          <TableCell align="center" width="20%"> Salary </TableCell>
+                          <TableCell align="center" width="20%"> Tel </TableCell>
+                          <TableCell align="center" width="20%"> Gender </TableCell>
+                          <TableCell align="center" width="20%"> Date of Birth </TableCell>
+                          <TableCell align="center" width="20%"> Year of Start </TableCell>
+                          <TableCell align="center" width="20%"> Address </TableCell>
+                          <TableCell align="center" width="20%"> Admin </TableCell>
+                          <TableCell align="center" width="20%"> Branch </TableCell>
+                          <TableCell align="center" width="20%"> location </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      {/* ดึงช้อมูล */}
+                      <TableBody>
+                        {doctors.map((item: DoctorsInterface) => (
+                          <TableRow key={item.ID}>
+                            <TableCell align="center">{item.ID}</TableCell>
+                            <TableCell align="center">{item.PersonalID}</TableCell>
+                            <TableCell align="center">{item.Name}</TableCell>
+                            <TableCell align="center">{item.Position}</TableCell>
+                            <TableCell align="center">{item.Email}</TableCell>
+                            <TableCell align="center">{item.Password}</TableCell>
+                            <TableCell align="center">{item.Salary}</TableCell>
+                            <TableCell align="center">{item.Tel}</TableCell>
+                            <TableCell align="center">{item.Gender}</TableCell>
+                            <TableCell align="center">{moment(item.DateOfBirth).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
+                            <TableCell align="center">{moment(item.YearOfStart).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
+                            <TableCell align="center">{item.Address}</TableCell>
+                            <TableCell align="center">{item.Admin.Aname}</TableCell>
+                            <TableCell align="center">{item.MedicalField?.Bname}</TableCell>
+                            <TableCell align="center">{item.WorkPlace?.Paddress}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
+              </Container>
+            </div>
+          </ThemeProvider>
       </Container>
+      </ThemeProvider>
     </div>
   );
 }

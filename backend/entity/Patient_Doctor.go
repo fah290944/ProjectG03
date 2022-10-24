@@ -24,7 +24,7 @@ type Patient struct {
 	gorm.Model
 	PatientsName string
 	DateAdmit    time.Time
-	Age         int
+	Age          int
 	// DoctorID ทำหน้าที่เป็น FK
 	DoctorID *uint
 	Doctor   Doctor
@@ -36,4 +36,5 @@ type Patient struct {
 	// SymptomsID ทำหน้าที่เป็น FK
 	SymptomsID *uint
 	Symptoms   Symptoms
+
 }

@@ -34,4 +34,6 @@ type Overtime struct {
 	//LocationID ทำหน้าที่เป็น FK
 	LocationworkID *uint
 	Locationwork   Locationwork `gorm:"references:ID"`
+
+
 }
