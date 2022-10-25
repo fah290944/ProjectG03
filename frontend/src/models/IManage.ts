@@ -15,16 +15,16 @@ export interface DoctorsInterface {
 
     AdminID: number;
     Admin: AdminsInterface;
-    WorkPlaceID?: number;
-    WorkPlace?: WorkPlacesInterface;
-    MedicalFieldID?: number;
-    MedicalField?: MedicalFieldsInterface;
+    WorkPlaceID: number;
+    WorkPlace: WorkPlacesInterface;
+    MedicalFieldID: number;
+    MedicalField: MedicalFieldsInterface;
 
 }
 
 export interface AdminsInterface {
 
-    ID?: number;
+    ID: number;
     Ausername?: string;
     Apassword?: string;
     Aname: string;
@@ -35,14 +35,14 @@ export interface AdminsInterface {
 
 export interface MedicalFieldsInterface {
 
-    ID?: number,
+    ID: number,
     Bname: string;
 
-   }
+}
 
 export interface WorkPlacesInterface {
 
-    ID?: number,
+    ID: number,
     Pname: string;
     Paddress: string;
 
