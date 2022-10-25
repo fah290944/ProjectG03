@@ -22,6 +22,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
 // assige type
 import { AdminsInterface, DoctorsInterface, MedicalFieldsInterface, WorkPlacesInterface } from "../../models/IManage";
+import { Typography } from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -417,18 +418,32 @@ function DoctorCreate() {
                 component={RouterLink}
                 to="/DoctorShow"
                 variant="contained"
-                color="success"
+                color="primary"
               >
-                Back
+                <Typography
+                  color="secondary"
+                  component="div"
+                  sx={{ flexGrow: 1 }}
+                >
+                  ย้อนกลับ
+
+                </Typography>
               </Button>
 
               <Button
                 style={{ float: "right" }}
                 onClick={submit}
                 variant="contained"
-                color="success"
+                color="primary"
               >
-                SAVE DATA
+                <Typography
+                  color="secondary"
+                  component="div"
+                  sx={{ flexGrow: 1 }}
+                >
+                  บันทึกข้อมูลแพทย์
+
+                </Typography>
               </Button>
             </Grid>
 

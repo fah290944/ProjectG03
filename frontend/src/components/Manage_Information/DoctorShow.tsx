@@ -75,9 +75,16 @@ function Doctors() {
                 component={RouterLink}
                 to="/Doctor"
                 variant="contained"
-                color="success"
+                color="primary"
               >
-                บันทึกข้อมูลแพทย์
+                <Typography
+                  color="secondary"
+                  component="div"
+                  sx={{ flexGrow: 1 }}
+                >
+                  บันทึกข้อมูลแพทย์
+
+                </Typography>
               </Button>
             </Box>
           </Box>

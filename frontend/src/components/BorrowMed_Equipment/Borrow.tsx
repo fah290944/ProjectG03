@@ -110,15 +110,15 @@ function Borrow() {
                 <TableHead>
                   {/* หัวข้อตาราง */}
                   <TableRow>
-                    <TableCell align="left" width="15%">
+                    <TableCell align="center" width="20%">
                       ID
                     </TableCell>
 
-                    <TableCell align="center" width="15%">
+                    <TableCell align="center" width="20%">
                       Name
                     </TableCell>
 
-                    <TableCell align="center" width="15%">
+                    <TableCell align="center" width="20%">
                       WorkPlace
                     </TableCell>
 
@@ -143,19 +143,19 @@ function Borrow() {
                 <TableBody>
                   {borrow.map((item: BorrowInterface) => (
                     <TableRow key={item.ID}>
-                      <TableCell align="left">{item.ID}</TableCell>
+                      <TableCell align="center">{item.ID}</TableCell>
 
-                      <TableCell align="left">{item.Doctor?.Name}</TableCell>
+                      <TableCell align="center">{item.Doctor?.Name}</TableCell>
 
                       <TableCell align="center">{item.Worklocation?.Name}</TableCell>
 
-                      <TableCell align="left">{item.MedicalEquipment?.Name}</TableCell>
+                      <TableCell align="center">{item.MedicalEquipment?.Name}</TableCell>
 
                       <TableCell align="center">{moment(item.BorrowDate).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
 
                       <TableCell align="center">{moment(item.ReturnDate).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
 
-                      <TableCell align="left">{item.Quant}</TableCell>
+                      <TableCell align="center">{item.Quant}</TableCell>
 
                     </TableRow>
                   ))}

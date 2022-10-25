@@ -113,15 +113,15 @@ console.log(schedule)
                 <TableHead> 
                   {/* หัวข้อตาราง */}
                   <TableRow>
-                    <TableCell align="left" width="15%">
+                    <TableCell align="center" width="20%">
                       ID
                     </TableCell>
 
-                    <TableCell align="center" width="15%">
+                    <TableCell align="center" width="20%">
                     Name
                     </TableCell>
 
-                    <TableCell align="center" width="15%">
+                    <TableCell align="center" width="20%">
                     activity
                     </TableCell>
 
@@ -137,11 +137,11 @@ console.log(schedule)
                 <TableBody>
                   {schedule.map((item: ScheduleInterface) => (
                     <TableRow key={item.ID}>
-                      <TableCell align="left">{item.ID}</TableCell>
+                      <TableCell align="center">{item.ID}</TableCell>
 
-                      <TableCell align="left">{item.Doctor?.Name}</TableCell>
+                      <TableCell align="center">{item.Doctor?.Name}</TableCell>
 
-                      <TableCell align="left">{item.MedActivity?.Name}</TableCell>
+                      <TableCell align="center">{item.MedActivity?.Name}</TableCell>
 
                       <TableCell align="center">{item.Location?.Name}</TableCell>
 
