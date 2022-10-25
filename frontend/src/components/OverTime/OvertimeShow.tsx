@@ -19,6 +19,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { green } from "@mui/material/colors";
 import { OvertimeInterface } from "../../models/IOvertiome";
+import moment from "moment";
 
 const theme = createTheme({
   palette: {
@@ -82,7 +83,7 @@ function OvertimeShow() {
 
    { field: "Num", headerName: "จำนวนชั่วโมงที่ทำ", width: 100 },
 
-   { field: "Time", headerName: "วันที่และเวลา", width: 200 },
+   { field: "Time", headerName: "วันที่และเวลา", width: 200 ,valueFormatter:(params) => moment(params.value.Time).format("DD/MM/YYYY HH:mm:ss A") },
 
  ];
 

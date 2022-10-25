@@ -69,6 +69,10 @@ function PatientsCreate() {
   const [error, setError] = React.useState(false);
   const [user, setUser] = React.useState<DoctorInterface>();
 
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+    new Date()
+  );
+
   const handleDateChange = (date: Date | null) => {
     setTime(date);
   };
@@ -499,7 +503,7 @@ function PatientsCreate() {
 
                   value={time}
 
-                  onChange={setTime}
+                  onChange={setSelectedDate}
                 />
 
               </LocalizationProvider>

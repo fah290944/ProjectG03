@@ -16,6 +16,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { green} from '@mui/material/colors';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { LeaveInterface } from "../../models/ILeave";
+import moment from "moment";
 
 
       
@@ -73,9 +74,9 @@ function LeaveShow() {
 
    { field: "Reason", headerName: "Reason", width: 200 },
 
-   { field: "Fdate", headerName: "First date", width: 150 },
+   { field: "Fdate", headerName: "First date", width: 200 ,valueFormatter:(params) => moment(params.value.Fdate).format("DD/MM/YYYY HH:mm:ss A")},
 
-   { field: "Ldate", headerName: "Last date", width: 150 },
+   { field: "Ldate", headerName: "Last date", width: 200 ,valueFormatter:(params) => moment(params.value.Ldate).format("DD/MM/YYYY HH:mm:ss A")},
    
    { field: "Type", headerName: "Type", width: 200 ,valueFormatter: (params) => params.value.Tleave},
 

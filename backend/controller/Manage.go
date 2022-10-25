@@ -133,7 +133,7 @@ func GetDoctor(c *gin.Context) {
 func ListDoctors(c *gin.Context) {
 	var doctors []entity.Doctor
 
-	if err := entity.DB().Preload("Doctor").Preload("WorkPlace").Preload("MedicalField").Raw("SELECT * FROM doctors").Scan(&doctors).Error; err != nil {
+	if err := entity.DB().Preload("Admin").Preload("WorkPlace").Preload("MedicalField").Raw("SELECT * FROM doctors").Find(&doctors).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

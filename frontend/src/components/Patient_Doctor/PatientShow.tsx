@@ -8,6 +8,8 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import { PatientsInterface } from "../../models/IPatient";
+import moment from "moment";
+
 
 const theme = createTheme({
   palette: {
@@ -54,7 +56,7 @@ function PatientsShow() {
 
    { field: "PatientsName", headerName: "ชื่อผู้ป่วย", width: 150 },
 
-   { field: "DateAdmit", headerName: "วันที่เข้ารักษา", width: 200 },
+   { field: "DateAdmit", headerName: "วันที่เข้ารักษา", width: 200 ,valueFormatter:(params) => moment(params.value.DateAdmit).format("DD/MM/YYYY HH:mm:ss A")},
 
    { field: "Age", headerName: "อายุ(ปี)", width: 70 },
 
