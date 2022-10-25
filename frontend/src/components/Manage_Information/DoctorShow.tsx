@@ -108,7 +108,7 @@ function Doctors() {
                           <TableCell align="center" width="20%"> location </TableCell>
                         </TableRow>
                       </TableHead>
-                      {/* ดึงช้อมูล */}
+                      
                       <TableBody>
                         {doctors.map((item: DoctorsInterface) => (
                           <TableRow key={item.ID}>
