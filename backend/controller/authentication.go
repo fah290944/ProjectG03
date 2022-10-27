@@ -12,7 +12,7 @@ import (
 // LoginPayload login body
 type LoginPayload struct {
 	Username string `json:"username"`
-	Password string `json:"password"`
+	Password string `json:"password"`//ไฟล์ json ให้อ่านข้อมูลง่ายขึ้น
 }
 
 // DoctorResponse token response
@@ -47,7 +47,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// ตรวจสอบรหัสผ่าน สิ่งที่เข้ารหัสมาถอดรหัส
+	// ตรวจสอบรหัสผ่าน สิ่งที่เข้ารหัส เอามาถอดรหัส
 	err := bcrypt.CompareHashAndPassword([]byte(signin.Password), []byte(payload.Password))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "password is incerrect"})
@@ -64,7 +64,7 @@ func Login(c *gin.Context) {
 		Issuer:          "AuthService",
 		ExpirationHours: 24,
 	}
-
+	//เก็บ token
 	signedToken, err := jwtWrapper.GenerateToken(signin.Username)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
@@ -75,7 +75,7 @@ func Login(c *gin.Context) {
 	var DoctorRole entity.UserRole
 	entity.DB().Raw("SELECT * FROM user_roles WHERE role_name = ?", "Admin").First(&AdminRole)
 	entity.DB().Raw("SELECT * FROM user_roles WHERE role_name = ?", "Doctor").First(&DoctorRole)
-
+//ตรวจสอบว่าใครเป็น หมอ หรือ ใครเป็น แอดมิน
 	if signin.UserRole.RoleName == DoctorRole.RoleName {
 		var doctor entity.Doctor
 		if tx := entity.DB().

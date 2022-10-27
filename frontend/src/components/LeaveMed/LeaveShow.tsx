@@ -48,7 +48,7 @@ function LeaveShow() {
 
     fetch(apiUrl, requestOptions)
 
-      .then((response) => response.json())
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
 
       .then((res) => {
 
@@ -165,8 +165,8 @@ function LeaveShow() {
                       <TableRow key={item.ID}>
                         <TableCell align="center">{item.ID}</TableCell>
                         <TableCell align="center">{item.Reason}</TableCell>
-                        <TableCell align="center">{moment(item.Fdate).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
-                        <TableCell align="center">{moment(item.Ldate).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
+                        <TableCell align="center">{moment(item.Fdate).format("DD/MM/YYYY")}</TableCell>
+                        <TableCell align="center">{moment(item.Ldate).format("DD/MM/YYYY")}</TableCell>
                         <TableCell align="center">{item.Type?.Tleave}</TableCell>
                         <TableCell align="center">{item.Doctor?.Name}</TableCell>
                         <TableCell align="center">{item.Evidence?.Etype}</TableCell>

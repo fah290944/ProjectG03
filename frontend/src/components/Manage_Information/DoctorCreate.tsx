@@ -23,6 +23,7 @@ import { green } from "@mui/material/colors";
 // assige type
 import { AdminsInterface, DoctorsInterface, MedicalFieldsInterface, WorkPlacesInterface } from "../../models/IManage";
 import { Typography } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const theme = createTheme({
   palette: {
@@ -38,6 +39,7 @@ const theme = createTheme({
 });
 
 function DoctorCreate() {
+  //Partial คือเลือกค่า แล้ว set ค่าได้เฉพาะตัวได้
   // เอาไว้เก็บค่าวันที่และเวลา
   const [dateBirth, setDateBirth] = React.useState<Date | null>(new Date());
   const [dateStart, setDateStart] = React.useState<Date | null>(new Date());
@@ -337,7 +339,7 @@ function DoctorCreate() {
               <FormControl fullWidth variant="outlined">
                 <FormLabel>Date of Birth</FormLabel>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DateTimePicker
+                  <DatePicker
                     renderInput={(props) => <TextField {...props} />}
                     value={dateBirth}
                     onChange={setDateBirth}

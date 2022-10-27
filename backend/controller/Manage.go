@@ -61,7 +61,7 @@ func CreateDoctor(c *gin.Context) {
 		return
 	}
 
-	// 9. ค้นหา workplace ด้วย id
+	// 9. ค้นหา workplace ด้วย id //tx.RowsAffected ตรวจสอบแถว
 	if tx := entity.DB().Where("id = ?", doctor.WorkPlaceID).First(&workplace); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "workplace not found"})
 		return

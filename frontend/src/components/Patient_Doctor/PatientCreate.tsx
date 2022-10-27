@@ -64,6 +64,7 @@ function PatientsCreate() {
     PatientTypeID: 0,
     DoctorID: 0,
   });
+      //Partial คือเลือกค่า แล้ว set ค่าได้เฉพาะตัวได้
   const [doctor, setDoctor] = React.useState<DoctorInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -101,7 +102,7 @@ function PatientsCreate() {
     };
 
     fetch(apiUrl, requestOptions)
-      .then((response) => response.json())
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
 
       .then((res) => {
         console.log(res.data); //show ข้อมูล

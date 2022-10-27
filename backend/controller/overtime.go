@@ -25,7 +25,7 @@ func CreateOvertime(c *gin.Context) {
 
 	}
 
-	// ค้นหา Doctor ด้วย id
+	// ค้นหา Doctor ด้วย id //tx.RowsAffected ตรวจสอบแถว
 	if tx := entity.DB().Where("id = ?", overtime.DoctorID).First(&doctor); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Doctor not found"})
 		return

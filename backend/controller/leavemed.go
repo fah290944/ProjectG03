@@ -24,7 +24,7 @@ func CreateLeave(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา Type ด้วย id
+	// ค้นหา Type ด้วย id //tx.RowsAffected ตรวจสอบแถว
 	if tx := entity.DB().Where("id = ?", leave.TypeID).First(&ttype); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type not found"})
 		return
@@ -42,7 +42,7 @@ func CreateLeave(c *gin.Context) {
 			return
 	}
 
-		// 12: สร้าง schedule
+		// 12: สร้าง Leave
 		ld := entity.Leave{
 			Doctor:		doctor,  
 			Type: 		ttype,

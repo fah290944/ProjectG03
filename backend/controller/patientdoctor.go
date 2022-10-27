@@ -23,7 +23,7 @@ func CreatePatient(c *gin.Context) {
 		return
 	}
 
-	//9: ค้นหา doctor ด้วย id
+	//9: ค้นหา doctor ด้วย id //tx.RowsAffected ตรวจสอบแถว
 	if tx := entity.DB().Where("id = ?", patient.DoctorID).First(&doctor); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "doctor not found"})
 		return

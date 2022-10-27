@@ -52,7 +52,7 @@ const theme = createTheme({
   });
   
   function Borrowed() {
-    //Partial คือเลือกค่า set ค่าได้เฉพาะตัวได้
+    //Partial คือเลือกค่า แล้ว set ค่าได้เฉพาะตัวได้
 
     const [dateStop, setDateStop] = React.useState<Date | null>(new Date());
     const [dateStart, setDateStart] = React.useState<Date | null>(new Date());
@@ -80,7 +80,7 @@ const theme = createTheme({
       };
       //การกระทำ //json
       fetch(apiUrl, requestOptions)
-        .then((response) => response.json())
+        .then((response) => response.json())//เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
   
         .then((res) => {
           console.log(res.data); //show ข้อมูล
@@ -180,13 +180,6 @@ const theme = createTheme({
       });
     };
   
-    // const handleChange = (event: SelectChangeEvent<{ name?: string; value: unknown }>) => {
-    //   const name = event.target.name as keyof typeof schedule;
-    //     setSchedule({
-    //       ...schedule,
-    //       [name]: event.target.value,
-    //     });
-    // };
   
     function submit() {
       let data = {
@@ -283,7 +276,7 @@ const theme = createTheme({
   
             <Divider />
   
-            <Grid container spacing={3} sx={{ padding: 2 }}>
+            <Grid container spacing={1} sx={{ padding: 2 }}>
               <Grid item xs={6}>
                 <p>เครื่องมือแพทย์</p>
   
@@ -336,7 +329,8 @@ const theme = createTheme({
                   variant="outlined"
                   type="number"
                   size="medium"
-                  InputProps={{ inputProps: { max: 9999999999999, min: 1111111111111 } }}
+                  InputProps={{ inputProps: { max: 9999999999999, min: 1 } }}
+                  //ใช้เมื่อ onclick
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -408,7 +402,7 @@ const theme = createTheme({
                     component="div"
                     sx={{ flexGrow: 1 }}
                   >
-                    บันทึกตารางเวลาแพทย์
+                    บันทึกการยืมเครื่องมือแพทย์
                   </Typography>
                 </Button>
               </Grid>

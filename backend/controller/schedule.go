@@ -25,7 +25,7 @@ func CreateSchedule(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา medActivity ด้วย id
+	// ค้นหา medActivity ด้วย id //tx.RowsAffected ตรวจสอบแถว
 	if tx := entity.DB().Where("id = ?", schedule.MedActivityID).First(&medActivity); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "MedActivity not found"})
 		return

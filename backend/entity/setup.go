@@ -30,7 +30,6 @@ func SetupDatabase() {
 		&WorkPlace{},
 		&MedicalField{},
 		
-		
 
 		//ระบบยืมเครื่องมือแพทย์ หรือ BorrowMed_Equipment 
 		&MedicalEquipment{},

@@ -95,7 +95,7 @@ function ScheduleCreate() {
     };
     //การกระทำ //json
     fetch(apiUrl, requestOptions)
-      .then((response) => response.json())
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
 
       .then((res) => {
         console.log(res.data); //show ข้อมูล

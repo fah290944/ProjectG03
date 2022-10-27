@@ -63,7 +63,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 
 function LeaveCreate() {
-
+    //Partial คือเลือกค่า แล้ว set ค่าได้เฉพาะตัวได้
   const [Fdate, setFdate] = React.useState<Date | null>(null);
 
   const [Ldate, setLdate] = React.useState<Date | null>(null);
@@ -95,7 +95,7 @@ function LeaveCreate() {
     });
   };
 
-
+  //เปิดปิดตัว Alert
   const handleClose = (
 
     event?: React.SyntheticEvent | Event,
@@ -294,7 +294,7 @@ function LeaveCreate() {
         <Grid container spacing={3} sx={{ padding: 2 }}>
           {/* ของหมอ */}
           <Grid item xs={6}>
-              <p>Doctor</p>
+              <p>แพทย์</p>
               <FormControl fullWidth variant="outlined">
                 <TextField
                   fullWidth
@@ -322,7 +322,7 @@ function LeaveCreate() {
 
               >
                   <option aria-label="None" value="">
-                    Choose Type Field
+                    กรุณาเลือกประเภทการลา
                   </option>
                 {type.map((item: TypeInterface) => (
                   <option value={item.ID}>{item.Tleave}</option>
@@ -363,7 +363,7 @@ function LeaveCreate() {
 
             <FormControl fullWidth variant="outlined">
 
-              <p>First Date</p>
+              <p>ลาตั้งแต่วันที่</p>
 
               <LocalizationProvider dateAdapter={AdapterDateFns}>
 
@@ -391,7 +391,7 @@ function LeaveCreate() {
 
             <FormControl fullWidth variant="outlined">
 
-              <p>Last Date</p>
+              <p>ถึงวันที่</p>
 
               <LocalizationProvider dateAdapter={AdapterDateFns}>
 

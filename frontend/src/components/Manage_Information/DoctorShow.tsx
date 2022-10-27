@@ -128,8 +128,8 @@ function Doctors() {
                             <TableCell align="center">{item.Salary}</TableCell>
                             <TableCell align="center">{item.Tel}</TableCell>
                             <TableCell align="center">{item.Gender}</TableCell>
-                            <TableCell align="center">{moment(item.DateOfBirth).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
-                            <TableCell align="center">{moment(item.YearOfStart).format("DD/MM/YYYY HH:mm:ss A")}</TableCell>
+                            <TableCell align="center">{moment(item.DateOfBirth).format("DD/MM/YYYY")}</TableCell>
+                            <TableCell align="center">{moment(item.YearOfStart).format("DD/MM/YYYY")}</TableCell>
                             <TableCell align="center">{item.Address}</TableCell>
                             <TableCell align="center">{item.Admin.Aname}</TableCell>
                             <TableCell align="center">{item.MedicalField?.Bname}</TableCell>

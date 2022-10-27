@@ -22,7 +22,7 @@ func CreateBorrow(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา medActivity ด้วย id
+	// ค้นหา medActivity ด้วย id //tx.RowsAffected ตรวจสอบแถว
 	if tx := entity.DB().Where("id = ?", borrow.MedicalEquipmentID).First(&medicalEquipment); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "MedicalEquipment not found"})
 		return
@@ -62,7 +62,7 @@ func CreateBorrow(c *gin.Context) {
 
 }
 
-// GET /schedule/:id ดึงข้อมูลเฉพาะตัวที่ต้องการ
+// GET /Borrow/:id ดึงข้อมูลเฉพาะตัวที่ต้องการ
 
 func GetBorrow(c *gin.Context) {
 
@@ -82,7 +82,7 @@ func GetBorrow(c *gin.Context) {
 
 }
 
-// GET /schedule ดึงทั้งหมดใน DB ของตารางเวลา
+// GET /Borrow ดึงทั้งหมดใน DB ของตารางเวลา
 func ListBorrows(c *gin.Context) {
 
 	var borrow []entity.Borrow
@@ -99,7 +99,7 @@ func ListBorrows(c *gin.Context) {
 
 }
 
-// WorkPlace.........................
+// WorkPlace// GET /:id ดึงข้อมูลเฉพาะตัวที่ต้องการ
 func GetWorklocation(c *gin.Context) {
 
 	var worklocation entity.Worklocation
