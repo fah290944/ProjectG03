@@ -56,6 +56,8 @@ return (
               {
               role === "Doctor" && (
                 <>
+                <Route path="/" element={<Home/>} />
+
                 <Route path="/Borrow" element={<Borrowed/>} />
                 <Route path="/Borrowshow" element={<Borrow />} />
 
@@ -72,10 +74,12 @@ return (
                 <Route path="/LeaveShow" element={<LeaveShow />} />
                 </>
               )
-              }
+            }
               {
                 role === "Admin" && (
                   <>
+                  <Route path="/" element={<Home/>} />
+                  
                   <Route path="/Doctor" element={<DoctorCreate />} />
                   <Route path="/DoctorShow" element={<DoctorShow />} />
                   </>

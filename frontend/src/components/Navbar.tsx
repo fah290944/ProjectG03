@@ -133,6 +133,7 @@ function Navbar() {
   }
 
   const menudoctor = [
+    { name: "หน้าหลัก", icon: <AccountCircleIcon  />, path: "/" },
     { name: "ระบบยืมเครื่องมือแพทย์", icon: <HomeRepairServiceIcon  />, path: "/Borrow" },
     { name: "ระบบบันทึกข้อมูลล่วงเวลา", icon: <PendingActionsIcon   />, path: "/Overtime" },
     { name: "ระบบผู้ป่วยในการดูแลของแพทย์", icon: <HealingIcon  />, path: "/Patient" },
@@ -140,6 +141,7 @@ function Navbar() {
     { name: "ระบบลาพักงานของแพทย์", icon: <EventNoteIcon />, path: "/leave" },
   ]
   const admindoctor = [
+    { name: "หน้าหลัก", icon: <AccountCircleIcon  />, path: "/" },
     { name: "ระบบจัดการข้อมูลแพทย์", icon: <ManageAccountsIcon  />, path: "/Doctor" },
     { name: "ระบบตารางข้อมูลแพทย์", icon: <ManageAccountsIcon  />, path: "/DoctorShow" },
   ]
